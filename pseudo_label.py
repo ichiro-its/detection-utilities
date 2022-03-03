@@ -25,13 +25,15 @@ if __name__ == "__main__":
       for image in tqdm(os.listdir(target_dir)):
         full_path = os.path.join(target_dir, image)
         if os.path.isfile(full_path) and full_path.split('.')[-1] in ['png', 'jpg', 'jpeg', 'tiff', 'bmp', 'gif']:
-          file_list_text.write(f"{full_path}.txt\n")
-          file_list_text.write(full_path)
+          file_list_text.write(full_path + "\n")
           detected_objects = net.detect(cv2.imread(full_path))
 
           image_text = open(f"{full_path.split('.')[0]}.txt", "w")
           for detected_object in detected_objects:
-            image_text.write(f"{detected_object['class_id']} {detected_object['x']} {detected_object['y']} {detected_object['w']} {detected_object['h']}\n")
+            image_text.write(
+              f"{detected_object['class_id']} {detected_object['x']} "
+              f"{detected_object['y']} {detected_object['w']} {detected_object['h']}\n"
+            )
           image_text.close()
 
       file_list_text.close()
