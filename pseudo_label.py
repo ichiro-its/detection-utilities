@@ -1,3 +1,5 @@
+import argparse
+from ctypes.wintypes import BOOL
 import cv2
 import os
 from tqdm import tqdm
@@ -5,17 +7,35 @@ from tqdm import tqdm
 from yolo import Yolo
 
 if __name__ == "__main__":
-  # TODO: change to args
-  data_path = "data"
-  weights = os.path.join(data_path, "yolo_weights.weights")
-  config = os.path.join(data_path, "config.cfg")
-  labels = os.path.join(data_path, "obj.names")
-  draw_output = True
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--CONF_THRESH', help='threshold for object confident',
+                      type=float, default=0.4)
+  parser.add_argument('--config', help='path for yolo config',
+                      type=str, default="data/config.cfg")
+  parser.add_argument('--CUDA', help='threshold for Non-maximum Suppression',
+                      type=bool, default=False)
+  parser.add_argument('--data_path', help='path for image data',
+                      type=str, default="data")
+  parser.add_argument('--draw', help='draw detection result on image',
+                      type=bool, default=True)               
+  parser.add_argument('--labels', help='path for yolo label',
+                      type=str, default="data/obj.names")
+  parser.add_argument('--NMS_THRESH', help='threshold for Non-maximum Suppression',
+                      type=float, default=0.4)
+  parser.add_argument('--weights', help='path for yolo weight',
+                      type=str, default="data/yolo_weights.weights")  
+  arg = parser.parse_args()
+
+  data_path = arg.data_path
+  weights = arg.weights
+  config = arg.config
+  labels = arg.labels
+  draw_output = arg.draw
 
   # init yolo network
-  conf_thresh = 0.4 # less == more boxes (but more false positives)
-  nms_thresh = 0.4 # less == more boxes (but more overlap)
-  net = Yolo(config, weights, labels, conf_thresh, nms_thresh, use_cuda=False)
+  conf_thresh = arg.CONF_THRESH # less == more boxes (but more false positives)
+  nms_thresh = arg.NMS_THRESH # less == more boxes (but more overlap)
+  net = Yolo(config, weights, labels, conf_thresh, nms_thresh, use_cuda=arg.CUDA)
 
   for name in os.listdir(data_path):
     target_dir = os.path.join(data_path, name)
