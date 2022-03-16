@@ -9,12 +9,12 @@ There are some optional arguments that we can add when run the script, including
 
 `python3 pseudo_label.py`
 
-### Delete Related Files when the Detection Result is Nothing
-To make our dataset cleaner, our script can delete annotation file and image when the detection result is nothing. 
+### Delete Related Files when the Detection Result is Empty
+To make our dataset cleaner, our script can delete annotation file and image when the detection result is empty. 
 It can also delete line in the file that contain all the image's name.
 In this script there is just one optional argument (--data_path), the default value is "data". 
 
-`python3 delete_blank_detection.py`
+`python3 delete_empty_detection.py`
 
 ### Change Annotation Format
 YOLO annotation's format that we want is `(class_id, x, y, width, height)`. This script is used to convert `(class_id, center_x, center_y, width, height)` format to our format.
