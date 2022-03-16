@@ -25,7 +25,7 @@ from tqdm import tqdm
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('--data_path', help='path for image data',
-                      type=str, default="data")
+                      type=str, default="data_coba")
   arg = parser.parse_args()
 
   data_path = arg.data_path
@@ -36,32 +36,26 @@ if __name__ == "__main__":
     if os.path.isdir(target_dir):
       print(f"\nRunning on directory {target_dir}...")
 
-      with open(f"{target_dir}.txt", "r") as file_list_text:
 
-        for everything in tqdm(os.listdir(target_dir)):
-          full_path = os.path.join(target_dir, everything)
-          file_name = full_path.split('.')[0]
-          extension = full_path.split('.')[-1]
+      for everything in tqdm(os.listdir(target_dir)):
+        full_path = os.path.join(target_dir, everything)
+        file_name = full_path.split('.')[0]
+        extension = full_path.split('.')[-1]
 
-          if os.path.isfile(full_path) and extension == 'txt':
-            line_in_file_list = file_list_text.readline().strip()
-            # check if file txt is empty -> no detection
-            if os.stat(full_path).st_size == 0:
-              # delete txt file
-              os.remove(full_path)
+        if os.path.isfile(full_path) and extension == 'txt':
+          with open(f"{file_name}.txt", "r") as file:
+            detected_objects = file.readlines()
+          
+          for i in range(len(detected_objects)):
+            class_id, center_x, center_y, w, h = detected_objects[i].split()
 
-              # delete image with different extension
-              for image_extension in ['jpg', 'png', 'jpeg', 'tiff', 'bmp', 'gif']:
-                try:
-                  os.remove(file_name + '.' + image_extension)
-                  break
-                except:
-                  print('file extensions do not match')
-              print(f"deleted ({file_name})")
-            else:
-              with open(f"{target_dir}_revision.txt", "a") as file:
-                # only write line when the data is not deleted
-                file.write(line_in_file_list + "\n")
-      
-      os.remove(f"{target_dir}.txt")
-      os.rename(f"{target_dir}_revision.txt", f"{target_dir}.txt")
+            w = float(w)
+            h = float(h)
+            x = float(center_x) - w/2
+            y = float(center_y) - h/2
+            detected_objects[i] = f"{class_id} {x} {y} {w} {h}\n"
+          
+          with open(f"{file_name}.txt", "w") as file:
+            file.writelines(detected_objects)
+
+
