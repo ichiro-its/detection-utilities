@@ -38,8 +38,8 @@ if __name__ == "__main__":
 
       with open(f"{target_dir}.txt", "r") as file_list_text:
 
-        for everything in tqdm(os.listdir(target_dir)):
-          full_path = os.path.join(target_dir, everything)
+        for file in tqdm(os.listdir(target_dir)):
+          full_path = os.path.join(target_dir, file)
           file_name = full_path.split('.')[0]
           extension = full_path.split('.')[-1]
 

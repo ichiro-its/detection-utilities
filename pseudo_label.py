@@ -19,7 +19,6 @@
 # THE SOFTWARE.
 
 import argparse
-from ctypes.wintypes import BOOL
 import cv2
 import os
 from tqdm import tqdm
@@ -32,7 +31,7 @@ if __name__ == "__main__":
                       type=float, default=0.4)
   parser.add_argument('--config', help='path for yolo config',
                       type=str, default="data/config.cfg")
-  parser.add_argument('--CUDA', help='threshold for Non-maximum Suppression',
+  parser.add_argument('--CUDA', help='to enable or disable CUDA',
                       type=bool, default=False)
   parser.add_argument('--data_path', help='path for image data',
                       type=str, default="data")

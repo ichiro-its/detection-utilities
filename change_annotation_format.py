@@ -25,7 +25,7 @@ from tqdm import tqdm
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('--data_path', help='path for image data',
-                      type=str, default="data_coba")
+                      type=str, default="data")
   arg = parser.parse_args()
 
   data_path = arg.data_path
@@ -37,8 +37,8 @@ if __name__ == "__main__":
       print(f"\nRunning on directory {target_dir}...")
 
 
-      for everything in tqdm(os.listdir(target_dir)):
-        full_path = os.path.join(target_dir, everything)
+      for file in tqdm(os.listdir(target_dir)):
+        full_path = os.path.join(target_dir, file)
         file_name = full_path.split('.')[0]
         extension = full_path.split('.')[-1]
 
@@ -57,5 +57,3 @@ if __name__ == "__main__":
           
           with open(f"{file_name}.txt", "w") as file:
             file.writelines(detected_objects)
-
-
