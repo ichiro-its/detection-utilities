@@ -1,3 +1,24 @@
+# Copyright (c) 2021 Ichiro ITS
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+import argparse
 import cv2
 import os
 from tqdm import tqdm
@@ -5,17 +26,35 @@ from tqdm import tqdm
 from yolo import Yolo
 
 if __name__ == "__main__":
-  # TODO: change to args
-  data_path = "data"
-  weights = os.path.join(data_path, "yolo_weights.weights")
-  config = os.path.join(data_path, "config.cfg")
-  labels = os.path.join(data_path, "obj.names")
-  draw_output = True
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--CONF_THRESH', help='threshold for object confident',
+                      type=float, default=0.4)
+  parser.add_argument('--config', help='path for yolo config',
+                      type=str, default="data/config.cfg")
+  parser.add_argument('--CUDA', help='to enable or disable CUDA',
+                      type=bool, default=False)
+  parser.add_argument('--data_path', help='path for image data',
+                      type=str, default="data")
+  parser.add_argument('--draw', help='draw detection result on image',
+                      type=bool, default=True)               
+  parser.add_argument('--labels', help='path for yolo label',
+                      type=str, default="data/obj.names")
+  parser.add_argument('--NMS_THRESH', help='threshold for Non-maximum Suppression',
+                      type=float, default=0.4)
+  parser.add_argument('--weights', help='path for yolo weight',
+                      type=str, default="data/yolo_weights.weights")  
+  arg = parser.parse_args()
+
+  data_path = arg.data_path
+  weights = arg.weights
+  config = arg.config
+  labels = arg.labels
+  draw_output = arg.draw
 
   # init yolo network
-  conf_thresh = 0.4 # less == more boxes (but more false positives)
-  nms_thresh = 0.4 # less == more boxes (but more overlap)
-  net = Yolo(config, weights, labels, conf_thresh, nms_thresh, use_cuda=False)
+  conf_thresh = arg.CONF_THRESH # less == more boxes (but more false positives)
+  nms_thresh = arg.NMS_THRESH # less == more boxes (but more overlap)
+  net = Yolo(config, weights, labels, conf_thresh, nms_thresh, use_cuda=arg.CUDA)
 
   for name in os.listdir(data_path):
     target_dir = os.path.join(data_path, name)
