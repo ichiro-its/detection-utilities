@@ -88,8 +88,28 @@ class Yolo:
           tx = int(cx - (w / 2))
           ty = int(cy - (h / 2))
 
+          # check top-left corner of the box
+          # if x is negative
+          if (tx < 0):
+            w = cx + (w / 2)
+            cx = w / 2
+          # if x is more than image width
+          elif (tx > width):
+            w = width - cx - (w / 2)
+            cx = width - (w / 2)
+
+          # if y is negative substitute to height/2 
+          # if y is negative
+          if (ty < 0):
+            h = cy + (h / 2)
+            cy = h / 2
+          # if y is more than image height
+          elif (ty > height):
+            h = height - cy - (h / 2)
+            cy = height - (h / 2)
+
           # update lists
-          boxes.append([tx,ty,int(w),int(h)])
+          boxes.append([cx,cy,int(w),int(h)])
           confidences.append(float(confidence))
           class_ids.append(class_id)
 
@@ -114,8 +134,8 @@ class Yolo:
         # extract detection data
         res.append({
           'class_id': class_ids[i],
-          'x': boxes[i][0] if boxes[i][0] > 0 else 0,
-          'y': boxes[i][1] if boxes[i][1] > 0 else 0,
+          'x': boxes[i][0],
+          'y': boxes[i][1],
           'w': boxes[i][2] if boxes[i][2] < width else width,
           'h': boxes[i][3] if boxes[i][3] < height else height
         })
