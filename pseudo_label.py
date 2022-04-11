@@ -89,11 +89,15 @@ if __name__ == "__main__":
             colors = [(255,0,0), (0,255,0), (0,0,255), (0,255,255), (255,0,255), (255,255,0)]
 
             for detected_object in detected_objects:
-              cv2.rectangle(image, (detected_object['x'], detected_object['y']),
-                (detected_object['x'] + detected_object['w'], detected_object['y'] + detected_object['h']),
+              x = int(detected_object['x'] - detected_object['w'] / 2)
+              y = int(detected_object['y'] - detected_object['h'] / 2)
+              x2 = int(detected_object['x'] + detected_object['w'] / 2)
+              y2 = int(detected_object['y'] + detected_object['h'] / 2)
+              cv2.rectangle(image, (x, y),
+                (x2, y2),
                 colors[detected_object['class_id'] % len(colors)])
 
-              cv2.putText(image, str(detected_object['class_id']), (detected_object['x'] + 3, detected_object['y'] + 15),
+              cv2.putText(image, str(detected_object['class_id']), (int(detected_object['x']), int(detected_object['y'])),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[detected_object['class_id']], 2)
 
             cv2.imwrite(os.path.join(output_dir, image_name), image)
