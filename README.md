@@ -22,5 +22,7 @@ YOLO annotation's format that we want is `(class_id, x, y, width, height)`. This
 `python3 change_annotation_format.py`
 
 ### Check YOLO model Latency
-`g++ check_latency.cpp -o check_latency.o `pkg-config --cflags --libs opencv4``
-`./check_latency.o`
+```
+g++ check_latency.cpp -o check_latency.o `pkg-config --cflags --libs opencv4`
+./check_latency.o
+```
