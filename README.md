@@ -20,3 +20,7 @@ In this script there is just one optional argument (--data_path), the default va
 YOLO annotation's format that we want is `(class_id, x, y, width, height)`. This script is used to convert `(class_id, center_x, center_y, width, height)` format to our format.
 
 `python3 change_annotation_format.py`
+
+### Check YOLO model Latency
+`g++ check_latency.cpp -o check_latency.o `pkg-config --cflags --libs opencv4``
+`./check_latency.o`
