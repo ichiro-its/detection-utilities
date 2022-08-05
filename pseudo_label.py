@@ -79,9 +79,9 @@ if __name__ == "__main__":
           image_text = open(f"{full_path.split('.')[0]}.txt", "w")
           for detected_object in detected_objects:
             image_text.write(
-              f"{detected_object['class_id']} {detected_object['x'] / width} "
-              f"{detected_object['y'] / height} {detected_object['w'] / width} "
-              f"{detected_object['h'] / height}\n"
+              f"{detected_object['class_id']} {(detected_object['x'] + detected_object['w'] / 2) / width} "
+              f"{(detected_object['y'] + detected_object['h'] / 2) / height} {(detected_object['w'] + 5) / width} "
+              f"{(detected_object['h'] + 5) / height}\n"
             )
           image_text.close()
 
