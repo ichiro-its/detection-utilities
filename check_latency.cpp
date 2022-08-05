@@ -36,7 +36,7 @@ public:
 
   DNNDetector();
 
-  void setSize(int size);
+  void setInputSize(int size);
   void loadModel(std::string class_file_path, std::string model_configuration_path, std::string model_weights_path);
   std::vector<DNNObjectDetector> detect(cv::Mat image);
 
@@ -68,7 +68,7 @@ DNNDetector::DNNDetector()
   this->nms_threshold = 0.3;
 }
 
-void DNNDetector::setSize(int size) {
+void DNNDetector::setInputSize(int size) {
   this->size = size;
 }
 
@@ -225,7 +225,7 @@ int main() {
 
   for (auto input_size: input_sizes) {
     double ms_double = 0.0;
-    detector.setSize(input_size);
+    detector.setInputSize(input_size);
     for (size_t i = 0; i < filenames.size(); i++)
     {
       //store the position of last '.' in the file name
