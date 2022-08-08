@@ -1,2 +1,4 @@
 data*
+model*
+*.o
 __pycache__
